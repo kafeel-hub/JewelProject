@@ -12,9 +12,11 @@
   "dependencies": {
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",
-    "@mui/material": "^6.1.8",
+    "@mui/icons-material": "^6.1.9",
+    "@mui/material": "^6.1.9",
     "@reduxjs/toolkit": "^2.3.0",
     "apisauce": "^3.1.0",
+    "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",

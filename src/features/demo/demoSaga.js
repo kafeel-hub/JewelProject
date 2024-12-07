@@ -3,14 +3,14 @@ import {
   fetchDemoDataFailure,
   fetchDemoDataSuccess,
   fetchDemoDataRequest,
-} from "./demo/demoSlice";
-import Api from "./../services/ApiCaller";
+} from "./demoSlice";
+import Api from "../../services/ApiCaller";
 
 export function* getdemoSaga(api, { payload = {} }) {
   yield put(fetchDemoDataRequest(true));
   try {
     // const { limit } = payload;
-    // const token = yield getAccessToken();
+    const token = yield getAccessToken();
     const result = yield call(
       Api.callServer,
       api.getDemo,

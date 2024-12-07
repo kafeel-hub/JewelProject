@@ -4,8 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import * as _ from "lodash";
 import { connect } from "react-redux";
 
-const DemoComponent = ({ getDummyData, dummyData }) => {
-  const { data, loading, error } = useSelector((state) => state.demo);
+const DemoComponent = ({ getDummyData }) => {
+  const { dummyData, loading, error } = useSelector((state) => state.demo);
 
   useEffect(() => {
     getDummyData();
@@ -22,6 +22,7 @@ const DemoComponent = ({ getDummyData, dummyData }) => {
 };
 const mapStateToProps = ({ demo = {} }) => {
   const dummyData = _.get(demo, "demodata", []);
+
   return { dummyData };
 };
 
