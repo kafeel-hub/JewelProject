@@ -50,20 +50,18 @@ export function* signIn(api, { payload = {} }) {
     };
 
     const result = yield call(Api.callServer, api.logIn, data, true);
-    console.log(result, "token");
 
     const parsedResponse = JSON.parse(result);
     if (result) {
-      yield put(loginSuccess(parsedResponse));
+      yield put(loginSuccess({...parsedResponse, userName:UserName}));
     }
-    navigate("/company-branch");
-
     yield put(setCredential(parsedResponse));
-    const Token = parsedResponse.Token;
-    const userId = parsedResponse.UserId;
-
+    const { Token, UserId } = parsedResponse;
+    yield call(getCompanylist, api, { payload: { userId: UserId } });
     const token = yield getAccessToken();
     console.log(token, "token get");
+    navigate("/company-branch");
+
   } catch (errorPayload) {
     if (
       errorPayload.message === "Invalidpassword" ||
@@ -91,14 +89,15 @@ export function* signIn(api, { payload = {} }) {
 
 export function* logout(api, { payload = {} }) {
   try {
-    yield delay(1800);
-    yield put(logOut());
-
-    if (payload) {
-      payload.replace("/");
+    yield put(logOut()); 
+    if (payload?.navigate) {
+      payload.navigate("/"); 
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error during logout:", error);
+  }
 }
+
 export function* getCompanylist(api, { payload = {} }) {
   yield put(companyListTrigger(true));
   try {
@@ -113,7 +112,14 @@ export function* getCompanylist(api, { payload = {} }) {
     // const list = JSON.parse(result);
     // const companyId = list[0]?.fldID;
     // console.log(companyId, list, "saga");
-    yield put(companyListSuccess(result));
+    let parseResult = []
+    if(result){
+      parseResult = JSON.parse(result);
+
+    }
+    console.log(parseResult, "result get");
+    
+    yield put(companyListSuccess(parseResult));
     // if (list) {
     //   const result2 = yield call(
     //     Api.callServer,
@@ -129,6 +135,7 @@ export function* getCompanylist(api, { payload = {} }) {
     yield put(companyListTrigger(false));
   }
 }
+
 export function* getCompanyBranchlist(api, { payload = {} }) {
   yield put(companyBranchListTrigger(true));
   try {
@@ -141,7 +148,12 @@ export function* getCompanyBranchlist(api, { payload = {} }) {
       { token, userId, companyId },
       true
     );
-    yield put(companyBranchListSuccess(result));
+    let parseResult = []
+    if(result){
+      parseResult = JSON.parse(result);
+
+    }
+    yield put(companyBranchListSuccess(parseResult));
   } catch (error) {
     yield put(companyBranchListFail(error));
   } finally {
@@ -152,7 +164,7 @@ export function* getCompanyBranchlist(api, { payload = {} }) {
 export function* getCompanyDetails(api, { payload = {} }) {
   yield put(CompanyDetailsTrigger(true));
   try {
-    const { userId, companyId, locationId } = payload;
+    const { userId, companyId, locationId,navigate } = payload;
     const token = yield getAccessToken();
     console.log(token, "token");
     const result = yield call(
@@ -161,7 +173,12 @@ export function* getCompanyDetails(api, { payload = {} }) {
       { token, userId, companyId, locationId },
       true
     );
-    yield put(CompanyDetailsSuccess(result));
+    let parseResult = []
+    if(result){
+      parseResult = JSON.parse(result);
+
+    }
+    yield put(CompanyDetailsSuccess(parseResult));
     navigate("/dashboard");
   } catch (error) {
     yield put(CompanyDetailsFail(error));

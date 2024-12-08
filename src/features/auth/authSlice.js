@@ -21,6 +21,7 @@ const authSlice = createSlice({
     companyBranchListLoading: false,
     companyBranchListError: undefined,
     CompanyDetailsLoading: false,
+    userName: null,
   },
   reducers: {
     setCredential(state, action) {
@@ -30,21 +31,25 @@ const authSlice = createSlice({
         token: action.payload.Token,
       };
     },
-    logOut(state, action) {
+    logOut: (state) => {
       return {
         ...state,
         user: null,
         token: null,
+        signInLoading: false,
+        signInError: undefined,
       };
     },
 
     loginSuccess: (state, action) => {
-      console.log(action.payload, "payload");
       return {
         ...state,
         user: action.payload.UserId,
         token: action.payload.Token,
+        userName:action.payload.userName,
         signInError: "",
+        signInLoading: false,
+
       };
     },
 
@@ -57,6 +62,8 @@ const authSlice = createSlice({
     loginFail: (state, action) => {
       return {
         signInError: action.payload,
+        signInLoading: false,
+
       };
     },
 
@@ -93,7 +100,6 @@ const authSlice = createSlice({
       };
     },
     companyListSuccess: (state, action) => {
-      console.log(action.payload, "act pay");
       return {
         ...state,
         companyList: action.payload,
@@ -111,7 +117,6 @@ const authSlice = createSlice({
       };
     },
     companyBranchListSuccess: (state, action) => {
-      console.log(action.payload, "act pay");
       return {
         ...state,
         companyBranchList: action.payload,
@@ -130,7 +135,6 @@ const authSlice = createSlice({
       };
     },
     CompanyDetailsSuccess: (state, action) => {
-      console.log(action.payload, "act pay");
       return {
         ...state,
         CompanyDetails: action.payload,
