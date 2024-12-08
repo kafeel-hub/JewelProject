@@ -6,7 +6,6 @@ import CustomizedSwitches from "../components/toggleButton";
 import DynamicTable from "../components/DynamicTable";
 import { useTheme } from '@mui/material/styles';
 import {Paper} from "@mui/material";
-
 const Home = () => {
   const theme = useTheme();
   const [rows, setRows] = useState([]);

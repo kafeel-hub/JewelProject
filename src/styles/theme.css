@@ -168,8 +168,9 @@ custom-card_001{
 }
 
 
-
-
+.custom-table-cell{
+  padding: 10px 2px !important;
+}
 
 /* Media queries */
 
