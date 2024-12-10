@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const authSlice = createSlice({
   name: "auth",
   initialState: {
+    comboBox: [],
     user: {},
     companyList: [],
     companyBranchList: [],
@@ -46,10 +47,9 @@ const authSlice = createSlice({
         ...state,
         user: action.payload.UserId,
         token: action.payload.Token,
-        userName:action.payload.userName,
+        userName: action.payload.userName,
         signInError: "",
         signInLoading: false,
-
       };
     },
 
@@ -63,7 +63,6 @@ const authSlice = createSlice({
       return {
         signInError: action.payload,
         signInLoading: false,
-
       };
     },
 
@@ -140,6 +139,14 @@ const authSlice = createSlice({
         CompanyDetails: action.payload,
       };
     },
+    comboBoxSuccess: (state, action) => {
+      console.log(action.payload, "comboBoxredux");
+
+      return {
+        ...state,
+        comboBox: action.payload,
+      };
+    },
   },
 });
 
@@ -159,6 +166,7 @@ export const {
   companyBranchListFail,
   companyBranchListTrigger,
   CompanyDetailsSuccess,
+  comboBoxSuccess,
   CompanyDetailsFail,
   CompanyDetailsTrigger,
 } = authSlice.actions;

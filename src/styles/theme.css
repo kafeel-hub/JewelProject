@@ -8,7 +8,7 @@
   --input-background: #f8f9fa;
   --input-text: #212529;
   --input-border: #ced4da;
-  --input-focus-border: #007bff;
+  /* --input-focus-border: #007bff; */
   --placeholder-color: #6c757d;
   --button-background: #007bff;
   --button-text: #ffffff;
@@ -27,11 +27,11 @@
   --input-background: #1E1E1E;
   --input-text: rgba(255, 255, 255, 0.87);
   --input-border: #37474f;
-  --input-focus-border: #90caf9;
+  /* --input-focus-border: #90caf9; */
   --placeholder-color: #b0bec5;
   --button-background: #1E88E5;
   --button-text: rgba(255, 255, 255, 0.87);
-  --hover-background: #1565c0;
+  /* --hover-background: #1565c0; */
   --hover-text: rgba(255, 255, 255, 0.87);
   --error-color: #EF5350;
   --page-background: black; /* Page background */
@@ -114,7 +114,7 @@ input[type="radio"] {
 
 
 
-/* by Asad */
+
 
 custom-card_001{
   border-radius: 10px !important;
@@ -170,6 +170,10 @@ custom-card_001{
 
 .custom-table-cell{
   padding: 10px 2px !important;
+}
+.custom-table-cell-dropdown{
+  padding: 10px 2px !important;
+  min-width: 150px !important
 }
 
 /* Media queries */

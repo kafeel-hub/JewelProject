@@ -28,7 +28,7 @@ const DashboardLayout = () => {
   const toggleTheme = () => {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    document.documentElement.setAttribute("data-theme", newTheme); // Update the `data-theme` attribute
+    document.documentElement.setAttribute("data-theme", newTheme);
   };
 
   const toggleSidebar = () => {

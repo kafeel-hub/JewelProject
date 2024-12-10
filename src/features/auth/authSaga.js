@@ -17,10 +17,12 @@ import {
   CompanyDetailsSuccess,
   CompanyDetailsFail,
   CompanyDetailsTrigger,
+  comboBoxSuccess,
 } from "./authSlice";
 import Api from "../../services/ApiCaller";
 import { jwtDecode } from "jwt-decode";
 import { getAccessToken } from "../../store/utilities";
+import { types } from "../../store/types";
 export function* signUp(api, { payload = {} }) {
   yield put(signUpTrigger(true));
   let errormsg = "";
@@ -29,6 +31,7 @@ export function* signUp(api, { payload = {} }) {
     let data = { name, email, password };
 
     const result = yield call(Api.callServer, api.signUp, data, true);
+
     yield put(signupSuccess(result));
     callback();
   } catch (errorPayload) {
@@ -53,7 +56,7 @@ export function* signIn(api, { payload = {} }) {
 
     const parsedResponse = JSON.parse(result);
     if (result) {
-      yield put(loginSuccess({...parsedResponse, userName:UserName}));
+      yield put(loginSuccess({ ...parsedResponse, userName: UserName }));
     }
     yield put(setCredential(parsedResponse));
     const { Token, UserId } = parsedResponse;
@@ -61,7 +64,6 @@ export function* signIn(api, { payload = {} }) {
     const token = yield getAccessToken();
     console.log(token, "token get");
     navigate("/company-branch");
-
   } catch (errorPayload) {
     if (
       errorPayload.message === "Invalidpassword" ||
@@ -89,9 +91,9 @@ export function* signIn(api, { payload = {} }) {
 
 export function* logout(api, { payload = {} }) {
   try {
-    yield put(logOut()); 
+    yield put(logOut());
     if (payload?.navigate) {
-      payload.navigate("/"); 
+      payload.navigate("/");
     }
   } catch (error) {
     console.error("Error during logout:", error);
@@ -112,13 +114,12 @@ export function* getCompanylist(api, { payload = {} }) {
     // const list = JSON.parse(result);
     // const companyId = list[0]?.fldID;
     // console.log(companyId, list, "saga");
-    let parseResult = []
-    if(result){
+    let parseResult = [];
+    if (result) {
       parseResult = JSON.parse(result);
-
     }
     console.log(parseResult, "result get");
-    
+
     yield put(companyListSuccess(parseResult));
     // if (list) {
     //   const result2 = yield call(
@@ -148,10 +149,9 @@ export function* getCompanyBranchlist(api, { payload = {} }) {
       { token, userId, companyId },
       true
     );
-    let parseResult = []
-    if(result){
+    let parseResult = [];
+    if (result) {
       parseResult = JSON.parse(result);
-
     }
     yield put(companyBranchListSuccess(parseResult));
   } catch (error) {
@@ -164,7 +164,7 @@ export function* getCompanyBranchlist(api, { payload = {} }) {
 export function* getCompanyDetails(api, { payload = {} }) {
   yield put(CompanyDetailsTrigger(true));
   try {
-    const { userId, companyId, locationId,navigate } = payload;
+    const { userId, companyId, locationId, navigate } = payload;
     const token = yield getAccessToken();
     console.log(token, "token");
     const result = yield call(
@@ -173,13 +173,34 @@ export function* getCompanyDetails(api, { payload = {} }) {
       { token, userId, companyId, locationId },
       true
     );
-    let parseResult = []
-    if(result){
+    let parseResult = [];
+    if (result) {
       parseResult = JSON.parse(result);
-
     }
     yield put(CompanyDetailsSuccess(parseResult));
     navigate("/dashboard");
+
+    const comboBoxResponses = {}; // Store all responses
+    for (let key in types.queryType) {
+      const result2 = yield call(
+        Api.callServer,
+        api.comboBox,
+        {
+          token,
+          companyId,
+          QueryType: types.queryType[key],
+          ConditionString: "",
+        },
+        true
+      );
+
+      if (result2) {
+        comboBoxResponses[key] = JSON.parse(result2);
+      }
+    }
+    console.log(comboBoxResponses, "data");
+
+    yield put(comboBoxSuccess(comboBoxResponses));
   } catch (error) {
     yield put(CompanyDetailsFail(error));
   } finally {

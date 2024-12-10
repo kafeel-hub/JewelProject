@@ -41,12 +41,33 @@ const create = (baseURL = baseUrl) => {
       { headers: { Authorization: `Bearer ${data.token}` } }
     );
   };
+  const comboBox = (data) => {
+    return apis.get(
+      `/Inventory/FillComboBox?CompanyId=${data?.companyId}&QueryType=${
+        data.QueryType
+      }&ConditionString=${data.ConditionString || ""}`,
+
+      { headers: { Authorization: `Bearer ${data.token}` } }
+    );
+  };
+  const itemInformation = (data) => {
+    return apis.get(
+      `/Inventory/GetItemInformation?CompanyId=${
+        data?.CompanyId
+      }&LocationId=${0}&ItemCode=${data?.ItemCode}`,
+
+      { headers: { Authorization: `Bearer ${data.token}` } }
+    );
+  };
+
   return {
     getDemo,
     logIn,
     getCompanylist,
     getCompanyLocation,
     getCompanyDetails,
+    comboBox,
+    itemInformation,
   };
 };
 export default {

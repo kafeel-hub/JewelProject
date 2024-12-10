@@ -16,23 +16,32 @@ import {
   DialogTitle,
   Snackbar,
   Alert,
-  Grid
+  Grid,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import AddIcon from '@mui/icons-material/Add';
-import { useTheme } from '@mui/material/styles';
-
-import { CustomInput,TableInput } from "./Customcomponents/CustomInputs";
+import AddIcon from "@mui/icons-material/Add";
+import { useTheme } from "@mui/material/styles";
+import { CustomSelect } from "./Customcomponents/CustomInputs";
+import { CustomInput, TableInput } from "./Customcomponents/CustomInputs";
 import { styled } from "@mui/material/styles";
 import { tableCellClasses } from "@mui/material/TableCell";
 
-const DynamicTable = ({ tableData = [] ,rows,setRows}) => {
+const DynamicTable = ({
+  tableData = {},
+  rows,
+  setRows,
+  itemList,
+  initialRows,
+  setSelectedId,
+}) => {
   const theme = useTheme();
 
   const [discount, setDiscount] = useState(0);
   const [tax, setTax] = useState(0);
-  const [deleteTarget, setDeleteTarget] = useState(null); 
-  const [showSnackbar, setShowSnackbar] = useState(false); 
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
@@ -45,8 +54,8 @@ const DynamicTable = ({ tableData = [] ,rows,setRows}) => {
       fontSize: 14,
       textAlign: "center",
       wordWrap: "break-word",
-      border:"none",
-      padding:"10px 2px 0 2px"
+      border: "none",
+      padding: "10px 2px 0 2px",
     },
   }));
 
@@ -55,42 +64,84 @@ const DynamicTable = ({ tableData = [] ,rows,setRows}) => {
     //   backgroundColor: theme.palette.action.hover,
     // },
     "& td": {
-        border:"none",
+      border: "none",
       borderBottom: "1px solid lightgray",
     },
   }));
 
-  const handleRowChange = (id, field, value) => {
-    const newValue = 
-      field === "qty" ||
-      field === "price" ||
-      field === "grossWeight" ||
-      field === "stoneWeight" ||
-      field === "netWeight" ||
-      field === "goldPrice" ||
-      field === "mcPerGram" ||
-      field === "unitPricePerGram" ||
-      field === "stoneAmount"
-        ? (value === "" ? "" : parseFloat(value) || 0) 
-        : value;
-  
-    setRows((prevRows) =>
-      prevRows.map((row) =>
-        row.id === id
-          ? {
-              ...row,
-              [field]: newValue,
-              amount:
-                (field === "price" || field === "qty")
-                  ? (row.qty || 0) * (row.price || 0)
-                  : row.amount,
-            }
-          : row
-      )
-    );
+  // const handleRowChange = (id, field, value) => {
+  //   const newValue =
+  //     field === "qty" ||
+  //     field === "price" ||
+  //     field === "grossWeight" ||
+  //     field === "stoneWeight" ||
+  //     field === "netWeight" ||
+  //     field === "goldPrice" ||
+  //     field === "mcPerGram" ||
+  //     field === "unitPricePerGram" ||
+  //     field === "stoneAmount"
+  //       ? value === ""
+  //         ? ""
+  //         : parseFloat(value) || 0
+  //       : value;
+
+  //   setRows((prevRows) =>
+  //     prevRows.map((row) =>
+  //       row.id === id
+  //         ? {
+  //             ...row,
+  //             [field]: newValue,
+  //             amount:
+  //               field === "price" || field === "qty"
+  //                 ? (row.qty || 0) * (row.price || 0)
+  //                 : row.amount,
+  //           }
+  //         : row
+  //     )
+  //   );
+  // };
+  const handleRowChange = (id, field, value, key) => {
+    console.log(field, value, "data");
+    setSelectedId(value);
+    if (field === "itemCode") {
+      console.log("tableData:", tableData);
+
+      const selectedItem = tableData ? tableData.ItmCode === value : null;
+      console.log(selectedItem, "selecteditem");
+
+      if (selectedItem) {
+        setRows((prevRows) =>
+          prevRows.map((row) =>
+            row.id === id
+              ? {
+                  ...row,
+                  itemCode: tableData.itemCode,
+                  description: tableData.ItmName,
+                  purity: tableData.purity,
+                  qty: tableData.qty,
+                  amount: tableData.price * tableData.qty,
+                }
+              : row
+          )
+        );
+      }
+    } else {
+      setRows((prevRows) =>
+        prevRows.map((row) =>
+          row.id === id
+            ? {
+                ...row,
+                [field]: value,
+                amount:
+                  field === "price" || field === "qty"
+                    ? (row.qty || 0) * (row.price || 0)
+                    : row.amount,
+              }
+            : row
+        )
+      );
+    }
   };
-  
-  
 
   const handleAddRow = () => {
     setRows((prevRows) => [
@@ -124,12 +175,11 @@ const DynamicTable = ({ tableData = [] ,rows,setRows}) => {
   const discountAmount = (subTotal * discount) / 100;
   const taxAmount = ((subTotal - discountAmount) * tax) / 100;
   const grandTotal = subTotal - discountAmount + taxAmount;
-
+  // console.log(tableData, "tableData");
   return (
     <div>
       <TableContainer>
-        <Table 
-        aria-label="dynamic table">
+        <Table aria-label="dynamic table">
           <TableHead>
             <TableRow>
               <StyledTableCell>#</StyledTableCell>
@@ -150,89 +200,117 @@ const DynamicTable = ({ tableData = [] ,rows,setRows}) => {
           <TableBody>
             {rows.map((row, index) => (
               <TableRow key={row.id}>
-                <TableCell className='custom-table-cell'>{index + 1}</TableCell>
-                <TableCell className='custom-table-cell'>
-                  {/* <CustomInput
+                <TableCell className="custom-table-cell">{index + 1}</TableCell>
+                <TableCell className="custom-table-cell">
+                  <CustomSelect
                     value={row.itemCode}
-                    onChange={(e) => handleRowChange(row.id, "itemCode", e.target.value)}
-                    type="number"
-                  /> */}
-                      <TableInput
-                    value={row.itemCode}
-                    onChange={(e) => handleRowChange(row.id, "itemCode", e.target.value)}
-                    type="text"
+                    onChange={(e) => {
+                      console.log(e, row, "e");
+                      handleRowChange(row.id, "itemCode", e.target.value);
+                    }}
+                    fullWidth
+                    options={
+                      itemList?.map((item) => ({
+                        value: item.fldID,
+                        label: item.fldDisplay,
+                      })) || []
+                    }
                   />
                 </TableCell>
-                <TableCell className='custom-table-cell'>
+                <TableCell className="custom-table-cell">
                   <CustomInput
                     value={row.description}
-                    onChange={(e) => handleRowChange(row.id, "description", e.target.value)}
+                    onChange={(e) =>
+                      handleRowChange(row.id, "description", e.target.value)
+                    }
                   />
                 </TableCell>
-                <TableCell className='custom-table-cell'>
+                <TableCell className="custom-table-cell">
                   <CustomInput
                     value={row.purity}
-                    onChange={(e) => handleRowChange(row.id, "purity", e.target.value)}
+                    // onChange={(e) =>
+                    //   handleRowChange(row.id, "purity", e.target.value)
+                    // }
                   />
                 </TableCell>
-                <TableCell className='custom-table-cell'>
+                <TableCell className="custom-table-cell">
                   <CustomInput
                     type="number"
                     value={row.qty}
-                    onChange={(e) => handleRowChange(row.id, "qty", e.target.value)}
+                    onChange={(e) =>
+                      handleRowChange(row.id, "qty", e.target.value)
+                    }
                   />
                 </TableCell>
-                <TableCell className='custom-table-cell'>
+                <TableCell className="custom-table-cell">
                   <CustomInput
                     type="number"
                     value={row.grossWeight}
-                    onChange={(e) => handleRowChange(row.id, "grossWeight", e.target.value)}
+                    onChange={(e) =>
+                      handleRowChange(row.id, "grossWeight", e.target.value)
+                    }
                   />
                 </TableCell>
-                <TableCell className='custom-table-cell'>
+                <TableCell className="custom-table-cell">
                   <CustomInput
                     type="number"
                     value={row.stoneWeight}
-                    onChange={(e) => handleRowChange(row.id, "stoneWeight", e.target.value)}
+                    onChange={(e) =>
+                      handleRowChange(row.id, "stoneWeight", e.target.value)
+                    }
                   />
                 </TableCell>
-                <TableCell className='custom-table-cell'>
+                <TableCell className="custom-table-cell">
                   <CustomInput
                     type="number"
                     value={row.netWeight}
-                    onChange={(e) => handleRowChange(row.id, "netWeight", e.target.value)}
+                    onChange={(e) =>
+                      handleRowChange(row.id, "netWeight", e.target.value)
+                    }
                   />
                 </TableCell>
-                <TableCell className='custom-table-cell'>
+                <TableCell className="custom-table-cell">
                   <CustomInput
                     type="number"
                     value={row.goldPrice}
-                    onChange={(e) => handleRowChange(row.id, "goldPrice", e.target.value)}
+                    onChange={(e) =>
+                      handleRowChange(row.id, "goldPrice", e.target.value)
+                    }
                   />
                 </TableCell>
-                <TableCell className='custom-table-cell'>
+                <TableCell className="custom-table-cell">
                   <CustomInput
                     type="number"
                     value={row.mcPerGram}
-                    onChange={(e) => handleRowChange(row.id, "mcPerGram", e.target.value)}
+                    onChange={(e) =>
+                      handleRowChange(row.id, "mcPerGram", e.target.value)
+                    }
                   />
                 </TableCell>
-                <TableCell className='custom-table-cell'>
+                <TableCell className="custom-table-cell">
                   <CustomInput
                     type="number"
                     value={row.unitPricePerGram}
-                    onChange={(e) => handleRowChange(row.id, "unitPricePerGram", e.target.value)}
+                    onChange={(e) =>
+                      handleRowChange(
+                        row.id,
+                        "unitPricePerGram",
+                        e.target.value
+                      )
+                    }
                   />
                 </TableCell>
 
-                <TableCell className='custom-table-cell'>
+                <TableCell className="custom-table-cell">
                   <CustomInput
                     type="number"
                     value={row.stoneAmount}
-                    onChange={(e) => handleRowChange(row.id, "stoneAmount", e.target.value)}
+                    onChange={(e) =>
+                      handleRowChange(row.id, "stoneAmount", e.target.value)
+                    }
                   />
                 </TableCell>
-                <TableCell className='custom-table-cell'>
+                <TableCell className="custom-table-cell">
                   <IconButton onClick={() => setDeleteTarget(row.id)}>
                     <DeleteIcon color="error" />
                   </IconButton>
@@ -243,8 +321,12 @@ const DynamicTable = ({ tableData = [] ,rows,setRows}) => {
         </Table>
       </TableContainer>
       {/* <CustomButton onClick={handleAddRow} text=" Add Item" theme={theme} fullWidth sx={{ mt: 2 }} variantType="dark" type="submit" /> */}
-      <Button onClick={handleAddRow} variant="outlined" sx={{ mt: 2 }} startIcon={<AddIcon />}>
-
+      <Button
+        onClick={handleAddRow}
+        variant="outlined"
+        sx={{ mt: 2 }}
+        startIcon={<AddIcon />}
+      >
         Add Item
       </Button>
 
@@ -261,11 +343,7 @@ const DynamicTable = ({ tableData = [] ,rows,setRows}) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setDeleteTarget(null)}>Cancel</Button>
-          <Button
-            onClick={handleDeleteRow}
-            variant="contained"
-            color="error"
-          >
+          <Button onClick={handleDeleteRow} variant="contained" color="error">
             Delete
           </Button>
         </DialogActions>
@@ -287,31 +365,26 @@ const DynamicTable = ({ tableData = [] ,rows,setRows}) => {
         </Alert>
       </Snackbar>
 
-
-
       <div style={{ marginTop: "20px" }}>
+        <Grid container spacing={2} sx={{ my: 2 }} alignItems="center">
+          <Grid item xs={2}>
+            <CustomInput
+              type="number"
+              value={discount}
+              onChange={(e) => setDiscount(e.target.value)}
+              label="Discount (%)"
+            />
+          </Grid>
 
-      <Grid container spacing={2}  sx={{ my: 2 }} alignItems="center">
-
-        <Grid item xs={2}>
-                <CustomInput
-                type="number"
-                value={discount}
-                onChange={(e) => setDiscount(e.target.value)}
-                label="Discount (%)"
-                />
+          <Grid item xs={2}>
+            <CustomInput
+              type="number"
+              value={tax}
+              onChange={(e) => setTax(e.target.value)}
+              label="Tax (%)"
+            />
+          </Grid>
         </Grid>
-
-        <Grid item xs={2}>
-
-        <CustomInput
-          type="number"
-          value={tax}
-          onChange={(e) => setTax(e.target.value)}
-          label="Tax (%)"
-        />
-        </Grid>
-</Grid>
 
         <div>
           <p>Sub Total: ${subTotal.toFixed(2)}</p>

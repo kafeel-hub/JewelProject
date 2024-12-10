@@ -4,38 +4,38 @@ import { createSlice } from "@reduxjs/toolkit";
 const demoSlice = createSlice({
   name: "demo",
   initialState: {
-    demodata: [],
-    demoloading: false,
-    demoerror: null,
+    itemData: [],
+    itemloading: false,
+    itemerror: null,
   },
   reducers: {
-    fetchDemoDataRequest(state, action) {
+    ItemInformationTrigger(state, action) {
       return {
         ...state,
-        demoloading: action.payload,
+        itemloading: action.payload,
       };
     },
-    fetchDemoDataSuccess: (state, action) => {
+    ItemInformationSuccess: (state, action) => {
       return {
         ...state,
-        demoloading: false,
-        demodata: action.payload,
+        itemloading: false,
+        itemData: { ...action.payload },
       };
     },
-    fetchDemoDataFailure: (state, action) => {
+    ItemInformationFailure: (state, action) => {
       return {
         ...state,
-        demoloading: false,
-        demoerror: action.payload,
+        itemloading: false,
+        itemerror: action.payload,
       };
     },
   },
 });
 
 export const {
-  fetchDemoDataRequest,
-  fetchDemoDataSuccess,
-  fetchDemoDataFailure,
+  ItemInformationFailure,
+  ItemInformationSuccess,
+  ItemInformationTrigger,
 } = demoSlice.actions;
 
 export default demoSlice.reducer;

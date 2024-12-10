@@ -1,26 +1,34 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 import {
-  fetchDemoDataFailure,
-  fetchDemoDataSuccess,
-  fetchDemoDataRequest,
+  ItemInformationFailure,
+  ItemInformationSuccess,
+  ItemInformationTrigger,
 } from "./demoSlice";
 import Api from "../../services/ApiCaller";
+import { getAccessToken } from "../../store/utilities";
 
-export function* getdemoSaga(api, { payload = {} }) {
-  yield put(fetchDemoDataRequest(true));
+export function* getItemInformation(api, { payload = {} }) {
+  yield put(ItemInformationTrigger(true));
+
   try {
-    // const { limit } = payload;
+    const { CompanyId, ItemCode } = payload;
     const token = yield getAccessToken();
     const result = yield call(
       Api.callServer,
-      api.getDemo,
-      //   { token, limit },
+      api.itemInformation,
+      { token, CompanyId, ItemCode },
       true
     );
-    yield put(fetchDemoDataSuccess(result));
+    let itemDetails = [];
+    if (result) {
+      itemDetails = JSON.parse(result);
+    }
+    console.log(itemDetails, "result get");
+
+    yield put(ItemInformationSuccess(itemDetails));
   } catch (error) {
-    yield put(fetchDemoDataFailure(error));
+    yield put(ItemInformationFailure(error));
   } finally {
-    yield put(fetchDemoDataRequest(false));
+    yield put(ItemInformationTrigger(false));
   }
 }
