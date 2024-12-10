@@ -11,6 +11,9 @@ const getTheme = (mode, primaryColor, secondaryColor, fontFamily) =>
       secondary: {
         main: secondaryColor || "#9c27b0",
       },
+      backgroundhead: {
+        default: mode === "dark" ? "#121212" : "#007bff",
+      },
       background: {
         default: mode === "dark" ? "#121212" : "#f4f6f8",
         paper: mode === "dark" ? "#1e1e1e" : "#ffffff",

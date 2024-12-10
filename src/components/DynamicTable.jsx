@@ -46,7 +46,7 @@ const DynamicTable = ({
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: "#007bff",
+      backgroundColor: theme.palette.backgroundhead.default,
       // theme.palette.common.black,
       color: theme.palette.common.white,
       fontWeight: "bold",
