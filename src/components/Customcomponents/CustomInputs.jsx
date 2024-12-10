@@ -82,7 +82,8 @@ const CustomSelect = ({
         value={value}
         onChange={onChange}
         label={label}
-        style={{ borderRadius: "12px" }}
+        style={{ borderRadius: "12px", width: "100%" }}
+        elevation={1}
       >
         {options &&
           options.map((option) => (

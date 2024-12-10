@@ -34,7 +34,7 @@
   /* --hover-background: #1565c0; */
   --hover-text: rgba(255, 255, 255, 0.87);
   --error-color: #EF5350;
-  --page-background: black; /* Page background */
+  --page-background: black; 
 }
 
 
@@ -129,7 +129,8 @@ custom-card_001{
 }
 .custom-btn-black {
   border: none;
-  background-color: #1C252E !important; 
+  background-color: #007bff !important; 
+  /* #1C252E */
   color: #ffffff !important; 
   font-weight: bold;
   cursor: pointer;
@@ -139,7 +140,8 @@ custom-card_001{
 }
 
 .custom-btn-black:hover {
-  background-color: #333A46 !important; 
+  background-color: #007bff !important; 
+  /* #333A46  */
   box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2) !important; 
 }
 
@@ -194,3 +196,4 @@ custom-card_001{
 
   }
 }
+

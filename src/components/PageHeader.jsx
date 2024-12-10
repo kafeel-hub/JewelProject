@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
-import Grid from "@mui/material/Grid"; // Make sure to import Grid from '@mui/material/Grid'
+import Grid from "@mui/material/Grid2"; // Make sure to import Grid from '@mui/material/Grid'
 import { CustomInput } from "./Customcomponents/CustomInputs";
-import { CustomSelect } from "./Customcomponents/CustomInputs";
-
+import InputFieldUpdated from "./Customcomponents/CustomInputfield";
+// import { CustomSelect } from "./Customcomponents/CustomInputs";
+import CustomDropdown from "./Customcomponents/CustomDropdown";
 const PageHeader = () => {
   const [formData, setFormData] = useState({
     item1: "",
@@ -36,7 +37,7 @@ const PageHeader = () => {
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={4}>
-          <CustomSelect
+          <CustomDropdown
             label="Company"
             value={dropdownValue}
             onChange={handleDropdownChange}
@@ -46,7 +47,7 @@ const PageHeader = () => {
           />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <CustomSelect
+          <CustomDropdown
             label="Company"
             value={dropdownValue}
             onChange={handleDropdownChange}
@@ -56,7 +57,7 @@ const PageHeader = () => {
           />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <CustomSelect
+          <CustomDropdown
             label="Company"
             value={dropdownValue}
             onChange={handleDropdownChange}
@@ -67,7 +68,7 @@ const PageHeader = () => {
         </Grid>
         {/* Input Fields Row */}
         <Grid item xs={12} sm={4}>
-          <CustomInput
+          <InputFieldUpdated
             label="Code"
             name="item1" // Ensure name matches the state field
             value={formData.item1}
@@ -75,7 +76,7 @@ const PageHeader = () => {
           />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <CustomInput
+          <InputFieldUpdated
             label="Code"
             name="item2" // Ensure name matches the state field
             value={formData.item2}
@@ -83,7 +84,7 @@ const PageHeader = () => {
           />
         </Grid>
         <Grid item xs={12} sm={4}>
-          <CustomInput
+          <InputFieldUpdated
             label="Code"
             name="item3" // Ensure name matches the state field
             value={formData.item3}

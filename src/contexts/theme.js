@@ -14,19 +14,17 @@ const getTheme = (mode, primaryColor, secondaryColor, fontFamily) =>
       background: {
         default: mode === "dark" ? "#121212" : "#f4f6f8",
         paper: mode === "dark" ? "#1e1e1e" : "#ffffff",
-        selected:"dark" ?"inherited":"rgb(239 248 244)",
-        newColor:"dark"?"#919EAB":"gray"
-
+        selected: "dark" ? "inherited" : "rgb(239 248 244)",
+        newColor: "dark" ? "#919EAB" : "gray",
       },
       text: {
         primary: mode === "dark" ? "#ffffff" : "#1C252E",
         secondary: mode === "dark" ? "#919EAB" : "#000000",
-        tertiary: "#ffd800",
+        tertiary: "#00000089",
         quaternary: "#ffffff",
         muted: "#919EAB",
-        selected:"#00a76f",
+        selected: "#00a76f",
         hover: mode === "dark" ? "#4b4a4a" : "#ececec",
-
       },
     },
     typography: {

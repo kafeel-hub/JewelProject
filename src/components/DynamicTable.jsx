@@ -27,7 +27,8 @@ import { CustomSelect } from "./Customcomponents/CustomInputs";
 import { CustomInput, TableInput } from "./Customcomponents/CustomInputs";
 import { styled } from "@mui/material/styles";
 import { tableCellClasses } from "@mui/material/TableCell";
-
+import CustomDropdown from "./Customcomponents/CustomDropdown";
+import InputFieldUpdated from "./Customcomponents/CustomInputfield";
 const DynamicTable = ({
   tableData = {},
   rows,
@@ -45,7 +46,8 @@ const DynamicTable = ({
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
+      backgroundColor: "#007bff",
+      // theme.palette.common.black,
       color: theme.palette.common.white,
       fontWeight: "bold",
       textAlign: "center",
@@ -199,10 +201,10 @@ const DynamicTable = ({
           </TableHead>
           <TableBody>
             {rows.map((row, index) => (
-              <TableRow key={row.id}>
+              <StyledTableRow key={row.id}>
                 <TableCell className="custom-table-cell">{index + 1}</TableCell>
                 <TableCell className="custom-table-cell">
-                  <CustomSelect
+                  <CustomDropdown
                     value={row.itemCode}
                     onChange={(e) => {
                       console.log(e, row, "e");
@@ -218,7 +220,7 @@ const DynamicTable = ({
                   />
                 </TableCell>
                 <TableCell className="custom-table-cell">
-                  <CustomInput
+                  <InputFieldUpdated
                     value={row.description}
                     onChange={(e) =>
                       handleRowChange(row.id, "description", e.target.value)
@@ -226,7 +228,7 @@ const DynamicTable = ({
                   />
                 </TableCell>
                 <TableCell className="custom-table-cell">
-                  <CustomInput
+                  <InputFieldUpdated
                     value={row.purity}
                     // onChange={(e) =>
                     //   handleRowChange(row.id, "purity", e.target.value)
@@ -234,7 +236,7 @@ const DynamicTable = ({
                   />
                 </TableCell>
                 <TableCell className="custom-table-cell">
-                  <CustomInput
+                  <InputFieldUpdated
                     type="number"
                     value={row.qty}
                     onChange={(e) =>
@@ -243,7 +245,7 @@ const DynamicTable = ({
                   />
                 </TableCell>
                 <TableCell className="custom-table-cell">
-                  <CustomInput
+                  <InputFieldUpdated
                     type="number"
                     value={row.grossWeight}
                     onChange={(e) =>
@@ -252,7 +254,7 @@ const DynamicTable = ({
                   />
                 </TableCell>
                 <TableCell className="custom-table-cell">
-                  <CustomInput
+                  <InputFieldUpdated
                     type="number"
                     value={row.stoneWeight}
                     onChange={(e) =>
@@ -261,7 +263,7 @@ const DynamicTable = ({
                   />
                 </TableCell>
                 <TableCell className="custom-table-cell">
-                  <CustomInput
+                  <InputFieldUpdated
                     type="number"
                     value={row.netWeight}
                     onChange={(e) =>
@@ -270,7 +272,7 @@ const DynamicTable = ({
                   />
                 </TableCell>
                 <TableCell className="custom-table-cell">
-                  <CustomInput
+                  <InputFieldUpdated
                     type="number"
                     value={row.goldPrice}
                     onChange={(e) =>
@@ -279,7 +281,7 @@ const DynamicTable = ({
                   />
                 </TableCell>
                 <TableCell className="custom-table-cell">
-                  <CustomInput
+                  <InputFieldUpdated
                     type="number"
                     value={row.mcPerGram}
                     onChange={(e) =>
@@ -288,7 +290,7 @@ const DynamicTable = ({
                   />
                 </TableCell>
                 <TableCell className="custom-table-cell">
-                  <CustomInput
+                  <InputFieldUpdated
                     type="number"
                     value={row.unitPricePerGram}
                     onChange={(e) =>
@@ -302,7 +304,7 @@ const DynamicTable = ({
                 </TableCell>
 
                 <TableCell className="custom-table-cell">
-                  <CustomInput
+                  <InputFieldUpdated
                     type="number"
                     value={row.stoneAmount}
                     onChange={(e) =>
@@ -315,7 +317,7 @@ const DynamicTable = ({
                     <DeleteIcon color="error" />
                   </IconButton>
                 </TableCell>
-              </TableRow>
+              </StyledTableRow>
             ))}
           </TableBody>
         </Table>
@@ -324,7 +326,7 @@ const DynamicTable = ({
       <Button
         onClick={handleAddRow}
         variant="outlined"
-        sx={{ mt: 2 }}
+        sx={{ mt: 2, alignSelf: "flex-start" }}
         startIcon={<AddIcon />}
       >
         Add Item
@@ -368,7 +370,7 @@ const DynamicTable = ({
       <div style={{ marginTop: "20px" }}>
         <Grid container spacing={2} sx={{ my: 2 }} alignItems="center">
           <Grid item xs={2}>
-            <CustomInput
+            <InputFieldUpdated
               type="number"
               value={discount}
               onChange={(e) => setDiscount(e.target.value)}
@@ -377,7 +379,7 @@ const DynamicTable = ({
           </Grid>
 
           <Grid item xs={2}>
-            <CustomInput
+            <InputFieldUpdated
               type="number"
               value={tax}
               onChange={(e) => setTax(e.target.value)}
@@ -386,7 +388,7 @@ const DynamicTable = ({
           </Grid>
         </Grid>
 
-        <div>
+        <div style={{ alignItems: "right" }}>
           <p>Sub Total: ${subTotal.toFixed(2)}</p>
           <p>Discount: ${discountAmount.toFixed(2)}</p>
           <p>Tax: ${taxAmount.toFixed(2)}</p>
