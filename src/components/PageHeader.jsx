@@ -38,7 +38,7 @@ const PageHeader = () => {
       <Grid container spacing={3}>
         <Grid item xs={12} sm={4}>
           <CustomDropdown
-            label="Company"
+            label="Company Name"
             value={dropdownValue}
             onChange={handleDropdownChange}
             options={options}
@@ -48,7 +48,7 @@ const PageHeader = () => {
         </Grid>
         <Grid item xs={12} sm={4}>
           <CustomDropdown
-            label="Company"
+            label="Sales Person"
             value={dropdownValue}
             onChange={handleDropdownChange}
             options={options}
@@ -58,7 +58,7 @@ const PageHeader = () => {
         </Grid>
         <Grid item xs={12} sm={4}>
           <CustomDropdown
-            label="Company"
+            label="Location"
             value={dropdownValue}
             onChange={handleDropdownChange}
             options={options}
@@ -69,7 +69,7 @@ const PageHeader = () => {
         {/* Input Fields Row */}
         <Grid item xs={12} sm={4}>
           <InputFieldUpdated
-            label="Code"
+            label="Invoice No."
             name="item1" // Ensure name matches the state field
             value={formData.item1}
             onChange={handleInputChange}
@@ -77,7 +77,7 @@ const PageHeader = () => {
         </Grid>
         <Grid item xs={12} sm={4}>
           <InputFieldUpdated
-            label="Code"
+            label="User Name"
             name="item2" // Ensure name matches the state field
             value={formData.item2}
             onChange={handleInputChange}
@@ -85,7 +85,7 @@ const PageHeader = () => {
         </Grid>
         <Grid item xs={12} sm={4}>
           <InputFieldUpdated
-            label="Code"
+            label="Date"
             name="item3" // Ensure name matches the state field
             value={formData.item3}
             onChange={handleInputChange}
